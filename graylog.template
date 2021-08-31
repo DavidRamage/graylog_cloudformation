@@ -1,0 +1,13 @@
+Resources:
+  ElasticsearchCluster:
+    Type: 'AWS::Elasticsearch::Domain'
+    Properties:
+        DomainName: graylog
+        EBSOptions:
+            EBSEnabled: true
+            Iops: 0
+            VolumeType: gp2
+            VolumeSize: 20
+        ElasticsearchClusterConfig:
+            InstanceCount: 1
+            InstanceType: m3.medium.elasticsearch

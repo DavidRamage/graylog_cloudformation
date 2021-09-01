@@ -2,12 +2,21 @@ Resources:
   ElasticsearchCluster:
     Type: 'AWS::Elasticsearch::Domain'
     Properties:
-        DomainName: graylog
-        EBSOptions:
-            EBSEnabled: true
-            Iops: 0
-            VolumeType: gp2
-            VolumeSize: 20
-        ElasticsearchClusterConfig:
-            InstanceCount: 1
-            InstanceType: m3.medium.elasticsearch
+      DomainName: graylog
+      EBSOptions:
+        EBSEnabled: true
+        Iops: 0
+        VolumeType: gp2
+        VolumeSize: 20
+      ElasticsearchClusterConfig:
+        InstanceCount: 1
+        InstanceType: m3.medium.elasticsearch
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 4a1a879b-ddf7-4e08-9adc-d0bb0090c821
+  GraylogServer:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+        ImageId: ami-09431fd90d8d07272
+        InstanceType: t3.medium
+        AvailabilityZone: us-west-2a

@@ -1,5 +1,21 @@
+Parameters:
+  ElasticsearchSubnetId:
+    Type: String
+
 Resources:
+  ElasticsearchSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: "Allow Access to Elasticsearch Cluster"
+      GroupName: GraylogElasticsearchAccess
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          ToPort: 9200
+          FromPort: 9200
+          SourceSecurityGroupName: GraylogElasticsearchAccess
+
   ElasticsearchCluster:
+    DependsOn: ElasticsearchSecurityGroup
     Type: 'AWS::Elasticsearch::Domain'
     Properties:
       DomainName: graylog
@@ -11,12 +27,17 @@ Resources:
       ElasticsearchClusterConfig:
         InstanceCount: 1
         InstanceType: m3.medium.elasticsearch
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 4a1a879b-ddf7-4e08-9adc-d0bb0090c821
+      VPCOptions:
+        SecurityGroupIds:
+          - !GetAtt ElasticsearchSecurityGroup.GroupId
+        SubnetIds:
+          - Ref: ElasticsearchSubnetId
+
   GraylogServer:
     Type: 'AWS::EC2::Instance'
     Properties:
-        ImageId: ami-09431fd90d8d07272
-        InstanceType: t3.medium
-        AvailabilityZone: us-west-2a
+      ImageId: ami-09431fd90d8d07272
+      InstanceType: t3.medium
+      AvailabilityZone: us-west-2a
+      SecurityGroupIds:
+        - Ref: ElasticsearchSecurityGroup

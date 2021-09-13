@@ -2,5 +2,5 @@ Resources:
   EsVpcAccessRole:
     Type: 'AWS::IAM::ServiceLinkedRole'
     Properties:
-      AWSServiceName: es.amazonaws.com
+      AWSServiceName: 'es.amazonaws.com'
       Description: 'Role for ES to access resources in my VPC'

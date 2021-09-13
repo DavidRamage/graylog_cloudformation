@@ -3,8 +3,15 @@ Parameters:
     Type: String
 
 Resources:
+  EsVpcAccessRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://dramage-cloudformation-templates.s3.us-west-2.amazonaws.com/es_vpc_access_role.template
+      TimeoutInMinutes: '15'
+
   ElasticsearchSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: EsVpcAccessRole
     Properties:
       GroupDescription: "Allow Access to Elasticsearch Cluster"
       GroupName: GraylogElasticsearchAccess
